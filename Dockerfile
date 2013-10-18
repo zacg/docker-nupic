@@ -43,7 +43,7 @@ RUN git clone https://github.com/numenta/nupic.git /home
 
 # Set enviroment variables
 RUN echo export NTA=/usr/bin/nta/eng >> ~/.bashrc
-RUN echo export NUPIC=/nupic >> ~/.bashrc
+RUN echo export NUPIC=/home/nupic >> ~/.bashrc
 RUN echo export BUILDDIR=/tmp/ntabuild >> ~/.bashrc
 RUN echo export MK_JOBS=3 >> ~/.bashrc
 RUN echo source '$NUPIC'/env.sh >> ~/.bashrc
