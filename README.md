@@ -9,6 +9,7 @@ Examples
 --------
 
 Build the image:
+
     sudo docker build -t="nupic" .
 
 Run the Python unit tests:
