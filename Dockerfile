@@ -2,6 +2,8 @@ FROM ubuntu
 
 MAINTAINER Allan Costa allaninocencio@yahoo.com.br
 
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+
 # Update repositories
 RUN apt-get update
 
@@ -39,17 +41,25 @@ RUN wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O - | python
 RUN pip install numpy
 
 #Clone NuPIC repository
-RUN git clone https://github.com/numenta/nupic.git /home
+RUN git clone https://github.com/numenta/nupic.git /home/nupic
 
 # Set enviroment variables
-RUN echo export NTA=/usr/bin/nta/eng >> ~/.bashrc
-RUN echo export NUPIC=/home/nupic >> ~/.bashrc
-RUN echo export BUILDDIR=/tmp/ntabuild >> ~/.bashrc
-RUN echo export MK_JOBS=3 >> ~/.bashrc
-RUN echo source '$NUPIC'/env.sh >> ~/.bashrc
+ENV NTA /usr/bin/nta/eng
+ENV NUPIC /home/nupic
+ENV BUILDDIR /tmp/ntabuild
+ENV MK_JOBS 3
 
-# Reload bash
-RUN exec bash
+# Enviroment variables setted by $NUPIC/env.sh
+ENV PY_VERSION 2.7
+ENV PATH $NTA/bin:$PATH
+ENV PYTHONPATH $NTA/lib/python$PY_VERSION/site-packages:$PYTHONPATH
+ENV NTA_ROOTDIR $NTA
+ENV NTA_DATA_PATH $NTA/share/prediction/data:$NTA_DATA_PATH
+ENV LDIR $NTA/lib
+ENV LD_LIBRARY_PATH $LDIR
+
+# OPF uses this
+ENV USER nupic
 
 #Install NuPIC
 RUN $NUPIC/build.sh
@@ -58,27 +68,10 @@ RUN $NUPIC/build.sh
 # Needed because NuPIC seems to still have hardcoded Python 2.6 portions 
 RUN ln -s /usr/lib/libpython2.7.so.1.0 /usr/lib/libpython2.6.so.1.0
 
-# Install dateutil (needed by hotgym.py)
-RUN pip install python-dateutil
-
-# Install validictory (needed by hotgym.py)
-RUN pip install validictory
-
-# Install if will run the python unit tests for NuPIC 
-RUN pip install pytest
-
-# Install if will run the python unit tests for NuPIC
-RUN pip install unittest2
-
 # Fix the "no --boxed argument" problem by replacing line 150 of $NTA/bin/run_tests.py:
 # -  args = ["--boxed", "--verbose"]
 # +  args = ["--verbose"]
-sed '150s/.*/\ \ args = ["--verbose"]/' bin/run_tests.py > run_tests.py & mv run_tests.py bin/run_tests.py
+RUN sed '150s/.*/\ \ args = ["--verbose"]/' $NUPIC/bin/run_tests.py > $NUPIC/run_tests.py & mv $NUPIC/run_tests.py $NUPIC/bin/run_tests.py
 
-
-# args = ["--verbose"]
-# Install curl (only for my project)
-# RUN apt-get install -y curl
-
-# ======>Disable host key checking for Github
-# ======> echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> /etc/ssh/ssh_config 
+# Cleanup
+RUN rm setuptools*
