@@ -16,7 +16,7 @@ RUN apt-get update
 # Install git (necessary to clone NuPIC repository)
 # Install libtool (needed by NuPIC builder)
 # Install automake (needed by NuPIC builder)
-RUN apt-get install -y build-essential wget python2.7 python-dev python-numpy git-core libtool automake
+RUN apt-get install -y apt-utils build-essential wget python2.7 python-dev python-numpy git-core libtool automake
 
 # Install setuptools (needed by pip)
 RUN wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python
