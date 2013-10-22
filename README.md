@@ -25,4 +25,5 @@ Run hotgym example:
 
     sudo docker run -privileged nupic /bin/bash -c "python /home/nupic/examples/opf/clients/hotgym/hotgym.py"
 
+    
 [1]:https://github.com/numenta/nupic

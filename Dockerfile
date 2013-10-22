@@ -1,44 +1,28 @@
 FROM ubuntu
 
-MAINTAINER Allan Costa allaninocencio@yahoo.com.br
+MAINTAINER Allan Costa <allaninocencio@yahoo.com.br>
 
+# Make sure the package repository is up to date
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 
-# Update repositories
+# Update repository
 RUN apt-get update
 
-# Install apt-utils
-RUN apt-get install -y apt-utils
-
-# Install make and gcc 
-RUN apt-get install -y build-essential
-
+# Install make and gcc (needed by NuPIC builder) 
 # Install wget (need for installing pip) 
-RUN apt-get install -y wget 
-
 # Update Python 2.7 
-RUN apt-get install -y python2.7 
-
 # Install Python devoleper libs (needed by pip)
-RUN apt-get install -y python-dev
-
+# Install numpy (needed by NuPIC)
 # Install git (necessary to clone NuPIC repository)
-RUN apt-get install -y git-core
-
 # Install libtool (needed by NuPIC builder)
-RUN apt-get install -y libtool
-
 # Install automake (needed by NuPIC builder)
-RUN apt-get install -y automake
+RUN apt-get install -y build-essential wget python2.7 python-dev python-numpy git-core libtool automake
 
 # Install setuptools (needed by pip)
 RUN wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python
 
-# Install pip
+# Install pip (needed by NuPIC builder)
 RUN wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O - | python
-
-# Install numpy (needed by NuPIC)
-RUN pip install numpy
 
 #Clone NuPIC repository
 RUN git clone https://github.com/numenta/nupic.git /home/nupic
@@ -58,7 +42,7 @@ ENV NTA_DATA_PATH $NTA/share/prediction/data:$NTA_DATA_PATH
 ENV LDIR $NTA/lib
 ENV LD_LIBRARY_PATH $LDIR
 
-# OPF uses this
+# OPF uses this (It's a workaround)
 ENV USER nupic
 
 #Install NuPIC
