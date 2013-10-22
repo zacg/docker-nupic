@@ -2,46 +2,28 @@ FROM ubuntu
 
 MAINTAINER Allan Costa allaninocencio@yahoo.com.br
 
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
-
-# Update repositories
-RUN apt-get update
-
-# Install apt-utils
-RUN apt-get install -y apt-utils
-
-# Install make and gcc
-RUN apt-get install -y build-essential
-
-# Install wget (need for installing pip)
-RUN apt-get install -y wget
-
-# Update Python 2.7
-RUN apt-get install -y python2.7
-
-# Install Python devoleper libs (needed by pip)
-RUN apt-get install -y python-dev
-
-# Install git (necessary to clone NuPIC repository)
-RUN apt-get install -y git-core
-
-# Install libtool (needed by NuPIC builder)
-RUN apt-get install -y libtool
-
-# Install automake (needed by NuPIC builder)
-RUN apt-get install -y automake
-
-# Install setuptools (needed by pip)
-RUN wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python
-
-# Install pip
-RUN wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O - | python
-
-# Install numpy (needed by NuPIC)
-RUN pip install numpy
+RUN \
+    echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list;\
+    apt-get update;\
+    apt-get install -y build-essential;\
+    apt-get install -y wget;\
+    apt-get install -y python2.7;\
+    apt-get install -y python-dev;\
+    apt-get install -y git-core;\
+    apt-get install -y libtool;\
+    apt-get install -y automake;\
+#RUN
 
 #Clone NuPIC repository
 RUN git clone https://github.com/numenta/nupic.git /home/nupic
+
+RUN \
+    wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python;\
+    wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O - | python;\
+#RUN
+
+# Install numpy (needed by NuPIC)
+RUN pip install numpy
 
 # Set enviroment variables
 ENV NTA /usr/bin/nta/eng
