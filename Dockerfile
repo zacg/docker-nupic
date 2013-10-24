@@ -2,28 +2,28 @@ FROM ubuntu
 
 MAINTAINER Allan Costa allaninocencio@yahoo.com.br
 
+# Install dependencies
 RUN \
     echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list;\
     apt-get update;\
+    apt-get install -y git-core;\
     apt-get install -y build-essential;\
     apt-get install -y wget;\
     apt-get install -y python2.7;\
     apt-get install -y python-dev;\
-    apt-get install -y git-core;\
     apt-get install -y libtool;\
     apt-get install -y automake;\
+    apt-get install -y python-numpy;\
 #RUN
 
-#Clone NuPIC repository
-RUN git clone https://github.com/numenta/nupic.git /home/nupic
-
+# Install setuptools (required by pip) and pip (required by NuPIC builder)
 RUN \
     wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python;\
     wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O - | python;\
 #RUN
 
-# Install numpy (needed by NuPIC)
-RUN pip install numpy
+# Clone NuPIC repository (takes some time)
+RUN git clone https://github.com/numenta/nupic.git /home/nupic
 
 # Set enviroment variables
 ENV NTA /usr/bin/nta/eng
@@ -40,7 +40,7 @@ ENV NTA_DATA_PATH $NTA/share/prediction/data:$NTA_DATA_PATH
 ENV LDIR $NTA/lib
 ENV LD_LIBRARY_PATH $LDIR
 
-# OPF uses this
+# OPF uses this (it's a workaround)
 ENV USER nupic
 
 #Install NuPIC
