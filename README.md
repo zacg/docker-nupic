@@ -30,7 +30,7 @@ Run the C++ tests:
 
 Run hotgym example:
 
-    sudo docker run allanino/nupic /bin/bash -c "python /home/nupic/examples/opf/clients/hotgym/hotgym.py"
+    sudo docker run allanino/nupic /bin/bash -c "python /usr/local/src/nupic/examples/opf/clients/hotgym/hotgym.py"
 
 
 [1]:https://github.com/numenta/nupic
