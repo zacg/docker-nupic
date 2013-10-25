@@ -23,15 +23,15 @@ RUN \
 #RUN
 
 # Clone NuPIC repository (takes some time)
-RUN git clone https://github.com/numenta/nupic.git /home/nupic
+RUN git clone https://github.com/numenta/nupic.git /usr/local/src/nupic
 
-# Set enviroment variables
+# Set enviroment variables needed by NuPIC builder
 ENV NTA /usr/bin/nta/eng
-ENV NUPIC /home/nupic
+ENV NUPIC /usr/local/src/nupic
 ENV BUILDDIR /tmp/ntabuild
 ENV MK_JOBS 3
 
-# Enviroment variables setted by $NUPIC/env.sh
+# More enviroment variables (setted originally by $NUPIC/env.sh)
 ENV PY_VERSION 2.7
 ENV PATH $NTA/bin:$PATH
 ENV PYTHONPATH $NTA/lib/python$PY_VERSION/site-packages:$PYTHONPATH
@@ -40,10 +40,7 @@ ENV NTA_DATA_PATH $NTA/share/prediction/data:$NTA_DATA_PATH
 ENV LDIR $NTA/lib
 ENV LD_LIBRARY_PATH $LDIR
 
-# OPF uses this (it's a workaround)
-ENV USER nupic
-
-#Install NuPIC
+# Install NuPIC
 RUN $NUPIC/build.sh
 
 # Create a symbolic link named libpython2.6.so.1.0 targeting libpython2.7.so.1.0
@@ -57,3 +54,9 @@ RUN sed '150s/.*/\ \ args = ["--verbose"]/' $NUPIC/bin/run_tests.py > $NUPIC/run
 
 # Cleanup
 RUN rm setuptools*
+
+# OPF needs this (It's a workaround. We can create a user, but I wanted to keep this image clean to use as base to my projects)
+ENV USER docker
+
+# Default directory
+WORKDIR /home/docker
