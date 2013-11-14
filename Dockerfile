@@ -13,11 +13,6 @@ RUN \
     apt-get install -y python-dev;\
     apt-get install -y libtool;\
     apt-get install -y automake;\
-    apt-get install -y python-numpy;\
-#RUN
-
-# Install setuptools (required by pip) and pip (required by NuPIC builder)
-RUN \
     wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python;\
     wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O - | python;\
 #RUN
@@ -40,17 +35,11 @@ ENV NTA_DATA_PATH $NTA/share/prediction/data:$NTA_DATA_PATH
 ENV LDIR $NTA/lib
 ENV LD_LIBRARY_PATH $LDIR
 
+# Install Python dependencies
+RUN pip install -r $NUPIC/external/common/requirements.txt
+
 # Install NuPIC
 RUN $NUPIC/build.sh
-
-# Create a symbolic link named libpython2.6.so.1.0 targeting libpython2.7.so.1.0
-# Needed because NuPIC seems to still have hardcoded Python 2.6 portions
-RUN ln -s /usr/lib/libpython2.7.so.1.0 /usr/lib/libpython2.6.so.1.0
-
-# Fix the "no --boxed argument" problem by replacing line 150 of $NTA/bin/run_tests.py:
-# - args = ["--boxed", "--verbose"]
-# + args = ["--verbose"]
-RUN sed '150s/.*/\ \ args = ["--verbose"]/' $NUPIC/bin/run_tests.py > $NUPIC/run_tests.py & mv $NUPIC/run_tests.py $NUPIC/bin/run_tests.py
 
 # Cleanup
 RUN rm setuptools*
