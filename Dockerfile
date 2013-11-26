@@ -1,6 +1,6 @@
 FROM ubuntu
 
-MAINTAINER Allan Costa allaninocencio@yahoo.com.br
+MAINTAINER Allan Costa <allaninocencio@yahoo.com.br>
 
 # Install dependencies
 RUN \
