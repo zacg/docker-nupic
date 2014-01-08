@@ -6,9 +6,9 @@ MAINTAINER Allan Costa <allaninocencio@yahoo.com.br>
 RUN \
     echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list;\
     apt-get update;\
+    apt-get install -y wget;\
     apt-get install -y git-core;\
     apt-get install -y build-essential;\
-    apt-get install -y wget;\
     apt-get install -y python2.7;\
     apt-get install -y python-dev;\
     apt-get install -y libtool;\
