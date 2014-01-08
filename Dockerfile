@@ -36,7 +36,7 @@ ENV LDIR $NTA/lib
 ENV LD_LIBRARY_PATH $LDIR
 
 # Install Python dependencies
-RUN pip install -r $NUPIC/external/common/requirements.txt
+RUN pip install --allow-all-external -r $NUPIC/external/common/requirements.txt
 
 # Install NuPIC
 RUN $NUPIC/build.sh
