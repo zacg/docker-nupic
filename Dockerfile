@@ -20,6 +20,7 @@ RUN \
 # Clone NuPIC repository (takes some time)
 RUN git clone https://github.com/numenta/nupic.git /usr/local/src/nupic
 
+
 # Set enviroment variables needed by NuPIC builder
 ENV NTA /usr/bin/nta/eng
 ENV NUPIC /usr/local/src/nupic
@@ -46,6 +47,20 @@ RUN rm setuptools*
 
 # OPF needs this (It's a workaround. We can create a user, but I wanted to keep this image clean to use as base to my projects)
 ENV USER docker
+
+# Clone Cerebro repository 
+RUN git clone https://github.com/numenta/nupic.cerebro.git /usr/local/src/nupic.cerebro
+
+# Install dependencies
+# Install Mongo
+RUN \
+    apt-get install -y libevent-dev;\
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10;\
+    echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list;\
+    apt-get update;\
+    apt-get install mongodb-10gen;\
+    pip -r install /usr/local/src/nupic.cerebro/requirements.txt;\
+#RUN
 
 # Default directory
 WORKDIR /home/docker
