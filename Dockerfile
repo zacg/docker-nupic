@@ -13,6 +13,7 @@ RUN \
     apt-get install -y python-dev;\
     apt-get install -y libtool;\
     apt-get install -y automake;\
+    apt-get install -y cmake;\
     wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python;\
     wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O - | python;\
 #RUN
@@ -58,8 +59,10 @@ RUN \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10;\
     echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list;\
     apt-get update;\
-    apt-get install mongodb-10gen;\
-    pip -r install /usr/local/src/nupic.cerebro/requirements.txt;\
+    apt-get install -y mongodb-10gen;\
+    mkdir /usr/local/data/;\
+    mkdir /usr/local/data/mongo;\
+    pip install -r /usr/local/src/nupic.cerebro/requirements.txt;\
 #RUN
 
 # Default directory
