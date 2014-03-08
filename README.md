@@ -30,11 +30,12 @@ Run the C++ tests:
 
 Run hotgym example:
 
-    sudo docker run allanino/nupic /bin/bash -c "python /usr/local/src/nupic/examples/opf/clients/hotgym/hotgym.py"
+	sudo docker run allanino/nupic /bin/bash -c "python /usr/local/src/nupic/examples/opf/clients/hotgym/hotgym.py"
 
     sudo docker run allanino/nupic /bin/bash -c "python /usr/local/src/nupic/examples/opf/bin/OpfRunExperiment.py /usr/local/src/nupic/examples/opf/experiments/multistep/hotgym/"
 
 Run Cerebro on port 1955:
+
 	sudo docker run -i -t -p=1955:1955 nupic-cerebro /bin/bash -c "cd /usr/local/src/nupic.cerebro; mongod --dbpath /usr/local/data/mongo --smallfiles & python cerebro.py 1955"
 	
 Once Cerebro is running you can connect to it from the host os by navigating to http://localhost:1955
