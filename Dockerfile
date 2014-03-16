@@ -21,3 +21,8 @@ RUN \
 #RUN
 
 
+EXPOSE 1955
+
+ENTRYPOINT ["/bin/bash", "-c", "cd /usr/local/src/nupic.cerebro; mongod --dbpath /usr/local/data/mongo --smallfiles & python cerebro.py 1955"]
+
+
